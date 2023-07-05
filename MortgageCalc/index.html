@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <script type="text/javascript" src="jquery-1.10.2.min.js"></script>
+        <link rel="stylesheet" href="styles.css">
+		<title>JA Mortgage Calc</title>
+	</head>
+
+	<body>
+    	<h1>Simple Mortgage Calculator</h1>
+		<div>
+            <form>
+                <label>Loan Amount: <input type="text" id="loan" value="100000"/><br>
+                <label>Interest Rate: <input type="text" id="interest" value="5"/><br>
+                <label>Length of Loan: <input type="text" id="years" value="30"/><br>
+                <label>Down Payment: <input type="text" id="down" value="20000"/><br>
+                <input type="button" id="button" value="Calculate" onClick="Calculator()" />
+                <!-- Mortgage formula: Monthly Payment = loan [ (1 + interest) ^ months ] / [ (1 + interest) ^ months - 1] PMI is about 0.05%-->
+            </form>
+            <script type="text/javascript">
+			function Calculator() {			
+				$(document).ready(function() {
+						var loan = document.getElementById("loan").value;
+						var interest = (document.getElementById("interest").value / 100) / 12;
+						var months = document.getElementById("years").value * 12;
+						var down = document.getElementById("down").value;
+						var loan = loan - down;
+						var pmiTotal = (loan * 0.02) / 12;
+						
+						var formulaTop = interest * (Math.pow((1 + interest), months));
+						var formulaBottom = Math.pow((1 + interest), months) - 1;
+						var payment = loan * ((formulaTop) / (formulaBottom));
+						document.getElementById("payment").innerHTML = Math.round(payment * 100) / 100;
+						document.getElementById("actualPmi").innerHTML = Math.round(pmiTotal * 100) / 100;
+						document.getElementById("grandTotal").innerHTML = Math.round((payment + pmiTotal) * 100) / 100;
+				});
+			}
+            </script>
+        </div>
+		<div>
+            <p>Your monthly payment will be: <span id="payment"></span></p>
+        </div>
+        <div id="pmi">
+        	<p>PMI Amount per month: <span id="actualPmi"></span></p>
+        </div>
+        <div id="total">
+        	<p><strong>Total payment amount per month: <span id="grandTotal"></span></strong></p>
+        </div>
+        </div>
+	</body>
+</html>
